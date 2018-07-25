@@ -56,8 +56,7 @@ If the script was invoked to additionally generate the binary:
 - Perform a series on operations on the compiler output known to further reduce code footprint.
 - Link an output binary.
 - Possibly strip the generated binary.
-- Compress the produced binary and concatenate it with a shell script that will decompress and execute it. THIS LAST STEP MAY NOT ALWAYS WORK.
-- TODO: Extract code to memory and excute it there instead.
+- Compress the produced binary and concatenate it with a shell script that will decompress and execute it.
 
 Only one source file is supported when generating a binary. This is to enable whole program optimization. The user can `#include` other source files inside this main source for convenience.
 
@@ -257,7 +256,7 @@ normally only pass control to the shell provided by the system, we now
 have nowhere to return to. Thus, we must make a system call
 [\[Ref11\]](#ref11){.citation} to terminate the program ourselves. The
 code that will do this is written into the [shrinky
-header](https://github.com/trilkk/shrinky/blob/master/src/shrinky.h)
+header](https://github.com/trilkk/dnload/blob/master/src/shrinky.h)
 directly as inline assembler. On `ia32` architecture, it will evaluate
 into the following single instruction:
 
@@ -1285,14 +1284,7 @@ practice it seems to be about 30 compressed bytes.
 
 ------------------------------------------------------------------------
 
-GLSL minification ====
-
-**TODO**: Write this chapter. Explain renaming, local frequency
-analysis, token simplification, etc.
-
-------------------------------------------------------------------------
-
-Acknowledgements ====
+### Acknowledgements
 
 This script would not have been possible without the prior work done by
 various other parties. Especially the following entities deserve kudos
@@ -1327,11 +1319,9 @@ And:
 The list might be missing some parties. Please notify me of any errors
 or omissions, so that people will get the credit they deserve.
 
-Legalese ====
+### License
 
-All contained code is licensed under the [new BSD
-license](https://github.com/trilkk/shrinky/blob/master/LICENCE)
-[\[ref9\]](#ref9){.citation}.
+All contained code is licensed under the [new BSD license](https://github.com/trilkk/dnload/blob/master/LICENCE).
 
 Note that this license only pertains to the code of the script(s)
 themselves. There are no restrictions imposed on the end products of the
@@ -1426,6 +1416,7 @@ attribute.
 
 # TODO
 
+* Add support for in-memory code decompression and execution, without writing to /tmp.
 * Add support for Vulkan and GLFW.
 * Add support for a separate output directory for temporary files.
 
