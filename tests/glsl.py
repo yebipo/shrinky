@@ -9,13 +9,13 @@ import sys
 if pathname and (pathname != "."):
   sys.path.append(pathname + "/..")
 
-from dnload.common import executable_check
-from dnload.common import executable_search
-from dnload.common import is_verbose
-from dnload.common import run_command
-from dnload.common import set_verbose
-from dnload.custom_help_formatter import CustomHelpFormatter
-from dnload.preprocessor import Preprocessor
+from shrinky.common import executable_check
+from shrinky.common import executable_search
+from shrinky.common import is_verbose
+from shrinky.common import run_command
+from shrinky.common import set_verbose
+from shrinky.custom_help_formatter import CustomHelpFormatter
+from shrinky.preprocessor import Preprocessor
 
 ########################################
 # Functions ############################
@@ -96,9 +96,9 @@ def main():
     else:
       raise RuntimeError("unknown source file: '%s'" % (ii))
 
-  dl = find_executable("dnload.py", "dnload")
+  dl = find_executable("shrinky.py", "shrinky")
   if is_verbose():
-    print("found dnload: '%s'" % (dl))
+    print("found shrinky: '%s'" % (dl))
   sm = find_executable("shader_minifier.exe", "Shader_Minifier")
   if is_verbose():
     print("found shader_minifier: '%s'" % (sm))
@@ -118,7 +118,7 @@ def main():
 
   for ii in source_files:
     fname = "/tmp/" + os.path.basename(ii)
-    fname_dn = fname + ".dnload"
+    fname_dn = fname + ".shrinky"
     fname_dn_in = fname_dn + ".h"
     fname_dn_out = fname_dn + ".payload"
     fname_sm = fname + ".shaderminifier"
@@ -126,7 +126,7 @@ def main():
     fname_sm_out = fname_sm + ".payload"
     run_command(["python", dl, ii, "-o", fname_dn_in])
     if is_verbose():
-      print("Wrote dnload -minified shader: '%s'" % (fname_dn_in))
+      print("Wrote shrinky -minified shader: '%s'" % (fname_dn_in))
     run_command(["mono", sm, ii, "-o", fname_sm_in])
     if is_verbose():
       print("Wrote shader_minifier -minified shader: '%s'" % (fname_sm_in))

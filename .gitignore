@@ -9,10 +9,7 @@ Makefile
 intro
 intro.dir/
 Release/
-src/hello_world
-src/intro
-src/quad
-src/*.glsl.preprocessed
+*.glsl.preprocessed
 ./*.exe
 *.bin
 *.ilk
@@ -27,3 +24,7 @@ src/*.glsl.preprocessed
 *.suo
 *.unprocessed
 *.vcxproj*
+examples/hello_world
+examples/intro
+examples/quad
+
