@@ -8,21 +8,29 @@ This is a fork of [dnload by Faemiyah](http://faemiyah.fi/demoscene/dnload).
 It serves no practical real-world use case, but can be utilized to aid
 in the creation of size-limited demoscene productions.
 
+The purpose of `shrinky` is to make modifications that makes `dnload` simpler to use on Arch Linux.
+
+These issues are fixed in `shrinky`, but were problematic when using `dnload` on Arch Linux:
+
+* Executables would not run under `zsh`, because of the header trick used for self-extracting executables.
+* Executables would exit by calling int 0x3 by default, causing a SIGTRAP signal. This default is changed.
+* g++7 would be selected instead of g++8, even if g++8 was available as `/usr/bin/g++`.
+
 ## System requirements
 
 * Arch Linux
 * GCC (g++) >= 8
-* sstrip by elfkickers
 * python3
 
-And optionally:
+Optionally:
 
 * SDL2
 * GLEW
 * GLFW
 * Vulkan
+* sstrip by elfkickers
 
-#### Quick installation of dependencies
+Quick installation of dependencies
 
     pacman --needed -S base-devel elfkickers glew glfw sdl2 vulkan-devel
 
