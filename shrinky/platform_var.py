@@ -146,7 +146,7 @@ def replace_osarch(repl_osarch, reason):
   if g_osarch == repl_osarch:
     return
   if is_verbose():
-    print(("%stargeting osarch '%s' instead of '%s'" % (reason, repl_osarch, g_osarch)))
+    print("%stargeting osarch '%s' instead of '%s'" % (reason, repl_osarch, g_osarch))
   g_osarch = repl_osarch
 
 def replace_osname(repl_osname, reason):
@@ -155,7 +155,7 @@ def replace_osname(repl_osname, reason):
   if g_osname == repl_osname:
     return
   if is_verbose():
-    print(("%stargeting osname '%s' instead of '%s'" % (reason, repl_osname, g_osname)))
+    print("%stargeting osname '%s' instead of '%s'" % (reason, repl_osname, g_osname))
   g_osname = repl_osname
 
 def replace_platform_variable(name, op):

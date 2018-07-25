@@ -161,7 +161,7 @@ class AssemblerSegment:
     if 0 >= highest_mergable:
       return False
     if is_verbose():
-      print(("Merging headers %s and %s at %i bytes." % (self.__name, op.__name, highest_mergable)))
+      print("Merging headers %s and %s at %i bytes." % (self.__name, op.__name, highest_mergable))
     for ii in range(highest_mergable):
       bytestream_src[-highest_mergable + ii].merge(bytestream_dst[ii])
     bytestream_dst[0:highest_mergable] = []

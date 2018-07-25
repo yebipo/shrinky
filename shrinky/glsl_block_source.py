@@ -58,9 +58,9 @@ class GlslBlockSource(GlslBlock):
     if is_verbose():
       output_message = "Shader file '%s' type" % (self.__filename)
       if self.__type:
-        print((output_message + (": '%s'" % (self.__type))))
+        print(output_message + (": '%s'" % (self.__type)))
       else:
-        print((output_message + " not detected, assuming generic."))
+        print(output_message + " not detected, assuming generic.")
 
   def format(self, force):
     """Return formatted output."""
@@ -135,7 +135,7 @@ class GlslBlockSource(GlslBlock):
     fd.write(self.generateHeaderOutput())
     fd.close()
     if is_verbose():
-      print(("Wrote GLSL header: '%s' => '%s'" % (self.__variable_name, self.__output_name)))
+      print("Wrote GLSL header: '%s' => '%s'" % (self.__variable_name, self.__output_name))
 
   def __str__(self):
     return "Source('%s' => '%s')" % (self.__output_name, self.__variable_name)

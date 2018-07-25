@@ -280,12 +280,12 @@ class GlslBlock:
       if typeid:
         if is_glsl_type(typeid):
           if (not typeid.isVectorType()) and (ii.getSwizzleLength() == 1):
-            print(("WARNING: redundant or invalid access %s on type %s" % (str(ii), str(typeid))))
+            print("WARNING: redundant or invalid access %s on type %s" % (str(ii), str(typeid)))
           ii.selectSwizzle(op)
         else:
-          print(("WARNING: access %s has invalid source type %s" % (str(ii), str(typeid))))
+          print("WARNING: access %s has invalid source type %s" % (str(ii), str(typeid)))
       else:
-        print(("WARNING: source %s of access %s has no type" % (str(ii.getSource()), str(ii))))
+        print("WARNING: source %s of access %s has no type" % (str(ii.getSource()), str(ii)))
     # Recursively descend to children.
     for ii in self._children:
       ii.selectSwizzle(op)
@@ -488,7 +488,7 @@ def tokenize_interpret(tokens):
       ii += 1
       continue
     # Fallback is to add token as-is.
-    print(("WARNING: GLSL: unknown element '%s'" % element))
+    print("WARNING: GLSL: unknown element '%s'" % element)
     ret += [element]
     ii += 1
   return ret

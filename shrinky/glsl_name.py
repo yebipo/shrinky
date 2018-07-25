@@ -29,7 +29,7 @@ class GlslName:
     if not self.__rename:
       if force:
         if is_verbose():
-          print(("WARNING: %s not locked" % (self)))
+          print("WARNING: %s not locked" % (self))
         return self.__name
       return ""
     return self.__rename

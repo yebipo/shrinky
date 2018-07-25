@@ -108,7 +108,7 @@ class Linker:
         if match:
           ret = os.path.basename(match.group(1))
           if is_verbose():
-            print(("Using shared library '%s' instead of '%s'." % (ret, libname)))
+            print("Using shared library '%s' instead of '%s'." % (ret, libname))
           return ret
       # Stop at first match.
       break
@@ -139,7 +139,7 @@ class Linker:
     fd.write(ld_script)
     fd.close()
     if is_verbose():
-      print(("Wrote linker script '%s'." % (dst)))
+      print("Wrote linker script '%s'." % (dst))
     return ld_script
 
   def link(self, src, dst, extra_args = []):

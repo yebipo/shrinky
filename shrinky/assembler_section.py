@@ -87,7 +87,7 @@ class AssemblerSection:
       while True:
         if len(self.__content) <= jj or re.match(r'\s*\S+\:\s*', self.__content[jj]):
           if is_verbose():
-            print(("Erasing function footer after '%s': %i lines" % (lst[1], jj - ii)))
+            print("Erasing function footer after '%s': %i lines" % (lst[1], jj - ii))
           self.erase(ii, jj)
           break
         jj += 1
@@ -137,7 +137,7 @@ class AssemblerSection:
         self.__content[jj] = re.sub(r'\d+', str(total_decrement), current_line)
       break
     if is_verbose():
-      print(("Erasing function header from '%s': %i lines" % (op, jj - ii - len(reinstated_lines))))
+      print("Erasing function header from '%s': %i lines" % (op, jj - ii - len(reinstated_lines)))
     self.erase(ii, jj)
     self.__content[ii:ii] = reinstated_lines
 
@@ -153,7 +153,7 @@ class AssemblerSection:
       while True:
         if len(self.__content) <= jj or re.match(r'\s*\S+\:\s*', self.__content[jj]):
           if is_verbose():
-            print(("Erasing function footer after interrupt '%s': %i lines" % (lst[1], jj - ii)))
+            print("Erasing function footer after interrupt '%s': %i lines" % (lst[1], jj - ii))
           self.erase(ii, jj)
           break
         jj += 1
@@ -168,7 +168,7 @@ class AssemblerSection:
     while True:
       if (0 > jj) or not re.match(r'\s*(pop\S).*', self.__content[jj], re.IGNORECASE):
         if is_verbose():
-          print(("Erasing function footer before jump to '%s': %i lines" % (op, ii - jj - 1)))
+          print("Erasing function footer before jump to '%s': %i lines" % (op, ii - jj - 1))
         self.erase(jj + 1, ii)
         break
       jj -= 1
@@ -313,7 +313,7 @@ class AssemblerSection:
       self.__content[ii] = "%s.balign %i\n" % (match.group(1), desired)
       adjustments += ["%i -> %i" % (align, desired)]
     if is_verbose() and adjustments:
-      print(("Alignment adjustment(%s): %s" % (self.get_name(), ", ".join(adjustments))))
+      print("Alignment adjustment(%s): %s" % (self.get_name(), ", ".join(adjustments)))
 
   def replace_content(self, op):
     """Replace content of this section with content of given section."""

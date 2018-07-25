@@ -46,7 +46,7 @@ class AssemblerFile:
       self.add_sections(current_section)
     if is_verbose():
       section_names = [x.get_name() for x in self.__sections]
-      print(("%i sections in '%s': %s" % (len(self.__sections), fname, str(section_names))))
+      print("%i sections in '%s': %s" % (len(self.__sections), fname, str(section_names)))
 
   def generate_fake_bss(self, assembler, und_symbols = None, elfling = None):
     """Remove local labels that would seem to generate .bss, make a fake .bss section."""
@@ -68,13 +68,13 @@ class AssemblerFile:
     if is_verbose():
       outstr = "Constructed fake .bss segement: "
       if 1073741824 < bss_size:
-        print(("%s%1.1f Gbytes%s" % (outstr, float(bss_size) / 1073741824.0, pt_load_string)))
+        print("%s%1.1f Gbytes%s" % (outstr, float(bss_size) / 1073741824.0, pt_load_string))
       elif 1048576 < bss_size:
-        print(("%s%1.1f Mbytes%s" % (outstr, float(bss_size) / 1048576.0, pt_load_string)))
+        print("%s%1.1f Mbytes%s" % (outstr, float(bss_size) / 1048576.0, pt_load_string))
       elif 1024 < bss_size:
-        print(("%s%1.1f kbytes%s" % (outstr, float(bss_size) / 1024.0, pt_load_string)))
+        print("%s%1.1f kbytes%s" % (outstr, float(bss_size) / 1024.0, pt_load_string))
       else:
-        print(("%s%u bytes%s" % (outstr, bss_size, pt_load_string)))
+        print("%s%u bytes%s" % (outstr, bss_size, pt_load_string))
     self.add_sections(bss)
     return bss
 
@@ -173,7 +173,7 @@ class AssemblerFile:
       section_str = text_section_str + rodata_section_str + data_section_str + other_section_str
       self.__sections = text_sections + rodata_sections + data_sections + other_sections
     if is_verbose():
-      print(("Sorted sections: " + ", ".join([x for x in section_str if x])))
+      print("Sorted sections: " + ", ".join([x for x in section_str if x]))
 
   def remove_rodata(self):
     """Remove .rodata sections by merging them into the previous/next .text section."""
@@ -210,7 +210,7 @@ class AssemblerFile:
       fd.write(output)
       fd.close()
       if is_verbose():
-        print(("Wrote assembler source: '%s'" % (op)))
+        print("Wrote assembler source: '%s'" % (op))
     else:
       prefix = assembler.format_block_comment("sections '%s'" % (str(section_names)))
       op.write(prefix)

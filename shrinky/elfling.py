@@ -61,7 +61,7 @@ class Elfling:
     wfd.close()
     self.__uncompressed_size = len(data) - info["entry"]
     if is_verbose():
-      print(("Wrote compressable program block '%s': %i bytes" % (dst, self.__uncompressed_size)))
+      print("Wrote compressable program block '%s': %i bytes" % (dst, self.__uncompressed_size))
     self.__contexts = []
     self.__weights = []
     (so, se) = run_command([self.__command, dst])
@@ -75,9 +75,9 @@ class Elfling:
           self.__weights += [int(individual_term[0], 10)]
           self.__contexts += [int(individual_term[1], 16)]
     if is_verbose():
-      print(("Program block compressed into '%s': %i bytes" % (dst + ".pack", compressed_size)))
-      print(("Compression weights: %s" % (str(self.__weights))))
-      print(("Compression contexts: %s" % (str(self.__contexts))))
+      print("Program block compressed into '%s': %i bytes" % (dst + ".pack", compressed_size))
+      print("Compression weights: %s" % (str(self.__weights)))
+      print("Compression contexts: %s" % (str(self.__contexts)))
     rfd = open(dst + ".pack", "rb")
     compressed_contexts = []
     compressed_weights = []

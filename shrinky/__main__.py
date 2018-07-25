@@ -309,7 +309,7 @@ static void asm_exit(void)
 #if defined(__FreeBSD__)
   asm_exit() asm("syscall" : /* no output */ : "a"(1) : /* no clobber */);
 #elif defined(__linux__)
-  asm_exit() asm("syscall" : /* no output */ : "a"(60) : /* no clobber */);
+  asm("syscall" : /* no output */ : "a"(60) : /* no clobber */);
 #else
 #pragma message SHRINKY_MACRO_STR(SHRINKY_ASM_EXIT_ERROR)
 #error
@@ -484,7 +484,7 @@ def collect_libraries(libraries, symbols, compilation_mode):
       library_set = library_set.union(set([ii.get_library().get_name()]))
     missing_libraries = library_set.difference(set(libraries))
     if missing_libraries:
-      print(("WARNING: found symbols suggest libraries: %s" % (str(list(missing_libraries)))))
+      print("WARNING: found symbols suggest libraries: %s" % (str(list(missing_libraries))))
     output_message = "Linking against libraries: "
   # Reorder libraries to ensure there is no problems with library scouring and UND symbols.
   problematic_libraries = ["gcc", "c", "m", "bcm_host"] # Order is important.
@@ -499,7 +499,7 @@ def collect_libraries(libraries, symbols, compilation_mode):
   else:
     ret = front + sorted(libraries)
   if is_verbose():
-    print(("%s%s" % (output_message, str(ret))))
+    print("%s%s" % (output_message, str(ret)))
   return ret
 
 def collect_libraries_rename(op):
@@ -512,20 +512,21 @@ def collect_libraries_rename(op):
 
 def compress_file(compression, pretty, src, dst):
   """Compress a file to be a self-extracting file-dumping executable."""
-  str_tail = "sed 1d"
-  str_cleanup = ";exit"
+  str_tail = "sed 1,2d"
+  # Many compos require that the temporary file is removed after running
+  str_cleanup = ";rm ~;exit"
   if pretty:
-    str_tail = "tail -n+2"
-    str_cleanup = ";rm ~;exit"
+    str_tail = "tail -n+3"
+  # #!bin/sh is needed when running zsh
   if "lzma" == compression:
     command = ["xz", "--format=lzma", "--lzma1=preset=9,lc=1,lp=0,nice=273,pb=0", "--stdout"]
-    header = "HOME=/tmp/i;%s $0|lzcat>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
+    header = "#!/bin/sh\nHOME=/tmp/i;%s $0|lzcat>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
   elif "raw" == compression:
     command = ["xz", "-9", "--extreme", "--format=raw", "--stdout"]
-    header = "HOME=/tmp/i;%s $0|xzcat -F raw>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
+    header = "#!/bin/sh\nHOME=/tmp/i;%s $0|xzcat -F raw>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
   elif "xz" == compression:
     command = ["xz", "--format=xz", "--lzma2=preset=9,lc=1,nice=273,pb=0", "--stdout"]
-    header = "HOME=/tmp/i;%s $0|xzcat>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
+    header = "#!/bin/sh\nHOME=/tmp/i;%s $0|xzcat>~;chmod +x ~;~%s" % (str_tail, str_cleanup)
   else:
     raise RuntimeError("unknown compression format '%s'" % compression)
   (compressed, se) = run_command(command + [src], False)
@@ -534,7 +535,7 @@ def compress_file(compression, pretty, src, dst):
   wfd.write(compressed)
   wfd.close()
   make_executable(dst)
-  print(("Wrote '%s': %i bytes" % (dst, os.path.getsize(dst))))
+  print("Wrote '%s': %i bytes" % (dst, os.path.getsize(dst)))
 
 def extract_symbol_names(source, prefix):
   """Analyze given preprocessed C source for symbol names."""
@@ -671,12 +672,12 @@ def generate_binary_minimal(source_file, compiler, assembler, linker, objcopy, e
     ii.write(fd, assembler)
     header_sizes += ii.size()
   if is_verbose():
-    print(("Size of headers: %i bytes" % (header_sizes)))
+    print("Size of headers: %i bytes" % (header_sizes))
   # Write content after headers.
   asm.write(fd, assembler)
   fd.close()
   if is_verbose():
-    print(("Wrote assembler source: '%s'" % (fname + ".S")))
+    print("Wrote assembler source: '%s'" % (fname + ".S"))
   # Assemble headers
   assembler.assemble(fname + ".S", fname + ".o")
   link_files = [fname + ".o"]
@@ -767,7 +768,7 @@ def generate_include_rand(implementation_rand, target_search_path, definition_ld
   header_rand_path, header_rand = os.path.split(header_rand)
   source_rand_path, source_rand = os.path.split(source_rand)
   if is_verbose:
-    print(("Using rand() implementation: '%s'" % (header_rand)))
+    print("Using rand() implementation: '%s'" % (header_rand))
   replace_platform_variable("function_rand", "%s_rand" % (implementation_rand))
   replace_platform_variable("function_srand", "%s_srand" % (implementation_rand))
   rand_type_bsd = str(int(implementation_rand == "bsd"))
@@ -782,7 +783,7 @@ def get_platform_und_symbols():
   if osname_is_freebsd():
     ret = sorted(["environ", "__progname"])
   if is_verbose():
-    print(("Checking for required UND symbols... " + str(ret)))
+    print("Checking for required UND symbols... " + str(ret))
   return ret
 
 def make_executable(op):
@@ -852,7 +853,7 @@ def readelf_probe(src, dst, size):
   truncate_size = info["size"]
   if size == truncate_size:
     if is_verbose():
-      print(("Executable size equals PT_LOAD size (%u bytes), no operation necessary." % (size)))
+      print("Executable size equals PT_LOAD size (%u bytes), no operation necessary." % (size))
     shutil.copy(src, dst)
     return None
   return truncate_size
@@ -864,7 +865,7 @@ def readelf_truncate(src, dst):
   if truncate_size is None:
     return
   if is_verbose():
-    print(("Truncating file size to PT_LOAD size: %u bytes" % (truncate_size)))
+    print("Truncating file size to PT_LOAD size: %u bytes" % (truncate_size))
   rfd = open(src, "rb")
   wfd = open(dst, "wb")
   wfd.write(rfd.read(truncate_size))
@@ -878,7 +879,7 @@ def readelf_zero(src, dst):
   if truncate_size is None:
     return
   if is_verbose():
-    print(("Filling file with 0 after PT_LOAD size: %u bytes" % (truncate_size)))
+    print("Filling file with 0 after PT_LOAD size: %u bytes" % (truncate_size))
   rfd = open(src, "rb")
   wfd = open(dst, "wb")
   wfd.write(rfd.read(truncate_size))
@@ -895,7 +896,7 @@ def replace_conflicting_library(symbols, src_name, dst_name):
   if not (src_found and dst_found):
     return symbols
   if is_verbose():
-    print(("Resolving library conflict: '%s' => '%s'" % (src_name, dst_name)))
+    print("Resolving library conflict: '%s' => '%s'" % (src_name, dst_name))
   ret = []
   dst = find_library_definition(dst_name)
   for ii in symbols:
@@ -935,7 +936,7 @@ def touch(op):
   """Emulate *nix 'touch' command."""
   if not os.path.exists(op):
     if is_verbose():
-      print(("Creating nonexistent file '%s'." % (op)))
+      print("Creating nonexistent file '%s'." % (op))
     fd = open(op, "w")
     fd.close()
   elif not os.path.isfile(op):
@@ -986,14 +987,14 @@ def main():
   parser.add_argument("-L", "--library-directory", default = [], action = "append", help = "Add a library directory to be searched for libraries when linking.")
   parser.add_argument("-m", "--method", default = "maximum", choices = ("vanilla", "dlfcn", "hash", "maximum"), help = "Method to use for decreasing output file size:\n\tvanilla:\n\t\tProduce binary normally, use no tricks except unpack header.\n\tdlfcn:\n\t\tUse dlopen/dlsym to decrease size without dependencies to any specific object format.\n\thash:\n\t\tUse knowledge of object file format to perform 'import by hash' loading, but do not break any specifications.\n\tmaximum:\n\t\tUse all available techniques to decrease output file size. Resulting file may violate object file specification.\n(default: %(default)s)")
   parser.add_argument("--march", type = str, help = "When compiling code, use given architecture as opposed to autodetect.")
-  parser.add_argument("--nice-exit", action = "store_true", help = "Do not use debugger trap, exit with proper system call.")
+  parser.add_argument("--nice-exit", default = True, action = "store_true", help = "Do not use debugger trap, exit with proper system call.")
   parser.add_argument("--nice-filedump", action = "store_true", help = "Do not use dirty tricks in compression header, also remove filedumped binary when done.")
   parser.add_argument("--no-glesv2", action = "store_true", help = "Do not probe for OpenGL ES 2.0, always assume regular GL.")
   parser.add_argument("--glsl-mode", default = "full", choices = ("none", "nosquash", "full"), help = "GLSL crunching mode.\n(default: %(default)s)")
   parser.add_argument("--glsl-inlines", default = -1, type = int, help = "Maximum number of inline operations to do for GLSL.\n(default: unlimited)")
   parser.add_argument("--glsl-renames", default = -1, type = int, help = "Maximum number of rename operations to do for GLSL.\n(default: unlimited)")
   parser.add_argument("--glsl-simplifys", default = -1, type = int, help = "Maximum number of simplify operations to do for GLSL.\n(default: unlimited)")
-  parser.add_argument("--linux", action = "store_true", help = "Try to target Linux if not in Linux. Equal to '-O linux'.")
+  parser.add_argument("--linux", default = True, action = "store_true", help = "Try to target Linux if not in Linux. Equal to '-O linux'.")
   parser.add_argument("-o", "--output-file", default = None, help = "Compile a named binary, do not only create a header. If the name specified features a path, it will be used verbatim. Otherwise the binary will be created in the same path as source file(s) compiled.")
   parser.add_argument("-O", "--operating-system", help = "Try to target given operating system insofar cross-compilation is possible.")
   parser.add_argument("-P", "--call-prefix", default = "shrinky_", help = "Call prefix to identify desired calls.\n(default: %(default)s)")
@@ -1013,10 +1014,10 @@ def main():
 
   # Early exit.
   if args.help:
-    print((parser.format_help().strip()))
+    print(parser.format_help().strip())
     return 0
   if args.version:
-    print(("%s %s" % (VERSION_REVISION, VERSION_DATE)))
+    print("%s %s" % (VERSION_REVISION, VERSION_DATE))
     return 0
 
   abstraction_layer = listify(args.abstraction_layer)
@@ -1102,13 +1103,13 @@ def main():
     if output_file:
       glsl_db.write()
     else:
-      print(("".join(glsl_db.format()).strip()))
+      print("".join(glsl_db.format()).strip())
     sys.exit(0)
 
   # Cross-compile 32-bit arguments.
   if args.m32:
     if osarch_is_32_bit():
-      print(("WARNING: ignoring 32-bit compile, osarch '%s' already 32-bit" % (g_osarch)))
+      print("WARNING: ignoring 32-bit compile, osarch '%s' already 32-bit" % (g_osarch))
     elif osarch_is_amd64():
       replace_osarch("ia32", "Cross-compile: ")
       extra_assembler_flags = ["--32"]
@@ -1121,7 +1122,7 @@ def main():
       raise RuntimeError("cannot attempt 32-bit compile for osarch '%s'" % (g_osarch))
   if args.march:
     if is_verbose:
-      print(("Using explicit march: '%s'" % (args.march)))
+      print("Using explicit march: '%s'" % (args.march))
     replace_platform_variable("march", args.march)
   # Cross-compile OS arguments.
   if args.linux:
@@ -1149,7 +1150,7 @@ def main():
     definitions += ["SHRINKY_GLESV2"]
     replace_platform_variable("gl_library", "GLESv2")
     if is_verbose():
-      print(("Assuming OpenGL ES 2.0: %s" % (gles_reason)))
+      print("Assuming OpenGL ES 2.0: %s" % (gles_reason))
 
   if 0 >= len(target_search_path):
     for ii in source_files:
@@ -1162,14 +1163,14 @@ def main():
   target_path, target_file = os.path.split(os.path.normpath(target))
   if target_path:
     if is_verbose():
-      print(("Using explicit target header file '%s'." % (target)))
+      print("Using explicit target header file '%s'." % (target))
   else:
     target_file = locate(target_search_path, target)
     if target_file:
       target = os.path.normpath(target_file)
       target_path, target_file = os.path.split(target)
       if is_verbose():
-        print(("Found header file: '%s/%s'" % (target_path, target_file)))
+        print("Found header file: '%s/%s'" % (target_path, target_file))
     else:
       raise RuntimeError("no information where to put header file '%s' - not found in path(s) %s" % (target, str(target_search_path)))
   # Erase contents of the header after it has been found.
@@ -1185,7 +1186,7 @@ def main():
   fd.write("\n")
   fd.close()
   if is_verbose():
-    print(("Analyzing source files: %s" % (str(source_files))))
+    print("Analyzing source files: %s" % (str(source_files)))
   # Prepare GLSL headers before preprocessing.
   for ii in source_files:
     generate_glsl_extract(ii, preprocessor, definition_ld, glsl_mode, glsl_inlines, glsl_renames, glsl_simplifys)
@@ -1211,13 +1212,13 @@ def main():
   real_symbols = list([x for x in symbols if not x.is_verbatim()])
   if is_verbose():
     symbol_strings = [str(x) for x in symbols]
-    print(("%i symbols found: %s" % (len(symbol_strings), str(symbol_strings))))
+    print("%i symbols found: %s" % (len(symbol_strings), str(symbol_strings)))
     verbatim_symbols = list(set(symbols) - set(real_symbols))
     if verbatim_symbols and output_file:
       verbatim_symbol_strings = []
       for ii in verbatim_symbols:
         verbatim_symbol_strings += [str(ii)]
-      print(("Not loading verbatim symbols: %s" % (str(verbatim_symbol_strings))))
+      print("Not loading verbatim symbols: %s" % (str(verbatim_symbol_strings)))
   # Header includes.
   subst = {}
   if symbols_has_library(symbols, "freetype"):
@@ -1263,7 +1264,7 @@ def main():
   fd.write(file_contents)
   fd.close()
   if is_verbose():
-    print(("Wrote header file: '%s'" % (target)))
+    print("Wrote header file: '%s'" % (target))
   # Early exit if preprocess only.
   if args.preprocess_only:
     sys.exit(0)
@@ -1321,7 +1322,7 @@ def main():
     output_basename, source_extension = os.path.splitext(output_basename)
     output_file = os.path.normpath(os.path.join(output_path, output_basename))
     if is_verbose():
-      print(("Using output file '%s' after source file '%s'." % (output_file, source_file)))
+      print("Using output file '%s' after source file '%s'." % (output_file, source_file))
 
   source_file = source_files[0]
   libraries = collect_libraries(libraries, real_symbols, compilation_mode)
@@ -1362,8 +1363,8 @@ def main():
     strip = executable_find(strip, default_strip_list, "strip")
     shutil.copy(output_file + ".unprocessed", output_file + ".stripped")
     run_command([strip, "-K", ".bss", "-K", ".text", "-K", ".data", "-R", ".comment", "-R", ".eh_frame", "-R", ".eh_frame_hdr", "-R", ".fini", "-R", ".gnu.hash", "-R", ".gnu.version", "-R", ".jcr", "-R", ".note", "-R", ".note.ABI-tag", "-R", ".note.tag", output_file + ".stripped"])
-    sstrip = executable_find(sstrip, default_sstrip_list, "sstrip")
-    run_command([sstrip, output_file + ".stripped"])
+    #sstrip = executable_find(sstrip, default_sstrip_list, "sstrip")
+    #run_command([sstrip, output_file + ".stripped"])
   compress_file(compression, nice_filedump, output_file + ".stripped", output_file)
 
   return 0

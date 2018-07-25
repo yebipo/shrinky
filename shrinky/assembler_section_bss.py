@@ -18,7 +18,7 @@ class AssemblerSectionBss(AssemblerSection):
   def add_element(self, op):
     """Add one variable element."""
     if op in self.__elements:
-      print(("WARNING: trying to add .%s element twice: %s" % (sekf.__name, str(element))))
+      print("WARNING: trying to add .%s element twice: %s" % (sekf.__name, str(element)))
       return
     self.__elements += [op]
     self.__elements.sort()

@@ -89,7 +89,7 @@ def interpret_int(source):
   if re.match(r'^\-?\d+f?$', source):
     # Suffixing number with 'f' is not allowd according to the spec, but NVidia accepts it.
     if source[-1] == "f":
-      print(("WARNING: GLSL: discarding number literal suffix for '%s'" % (source)))
+      print("WARNING: GLSL: discarding number literal suffix for '%s'" % (source))
       return GlslInt(source[:-1])
     return GlslInt(source)
   return None

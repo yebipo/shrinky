@@ -28,7 +28,7 @@ class GlslAccess:
       if not self.__swizzle_export:
         if force:
           if is_verbose():
-            print(("WARNING: %s swizzle status unconfirmed" % (str(self))))
+            print("WARNING: %s swizzle status unconfirmed" % (str(self)))
           return ret + self.__name.format(force)
         return ""
       return ret + self.generateSwizzle()

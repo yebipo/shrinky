@@ -24,6 +24,8 @@ Release/
 *.suo
 *.unprocessed
 *.vcxproj*
+
+examples/shrinky.h
 examples/hello_world
 examples/intro
 examples/quad

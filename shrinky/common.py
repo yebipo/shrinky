@@ -25,7 +25,7 @@ def executable_check(op):
       proc.kill()
       proc.wait()
   except OSError:
-    print(("WARNING: subprocess '%s' did not terminate properly" % (op)))
+    print("WARNING: subprocess '%s' did not terminate properly" % (op))
     return True
   return True
 
@@ -62,9 +62,9 @@ def executable_search(op, description = None):
   if description and is_verbose():
     output_message = "Looking for '%s' executable... " % (description)
     if ret:
-      print(("%s'%s'" % (output_message, ret)))
+      print("%s'%s'" % (output_message, ret))
     else:
-      print(("%snot found" % (output_message)))
+      print("%snot found" % (output_message))
   return ret
 
 
@@ -163,7 +163,7 @@ def locate(pth, fn, previous_paths = None):
 def run_command(lst, decode_output = True):
   """Run program identified by list of command line parameters."""
   if is_verbose():
-    print(("Executing command: %s" % (" ".join(lst))))
+    print("Executing command: %s" % (" ".join(lst)))
   proc = subprocess.Popen(lst, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
   (proc_stdout, proc_stderr) = proc.communicate()
   if decode_output and not isinstance(proc_stdout, str):

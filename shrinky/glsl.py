@@ -86,7 +86,7 @@ class Glsl:
           if is_listing(block):
             inout_merges += [block[0]]
         if inout_merges:
-          print(("GLSL inout connections found: %s" % (str(list(map(str, inout_merges))))))
+          print("GLSL inout connections found: %s" % (str(list(map(str, inout_merges)))))
       # Run rename passes until done.
       renames = 0
       for ii in merged:
@@ -121,7 +121,7 @@ class Glsl:
       if combines:
         operations += ["%i combines" % (combines)]
       if operations:
-        print(("GLSL processing done: %s" % (", ".join(operations))))
+        print("GLSL processing done: %s" % (", ".join(operations)))
 
   def format(self):
     """Format output."""
@@ -338,7 +338,7 @@ class Glsl:
       selected_for = rgba
       selected_against = "stpq: %i, xyzw: %i" % (stpq, xyzw)
     if is_verbose():
-      print(("Selected GLSL swizzle: %s (%i vs. %s)" % (str(ret), selected_for, selected_against)))
+      print("Selected GLSL swizzle: %s (%i vs. %s)" % (str(ret), selected_for, selected_against))
     return ret
 
   def write(self):
@@ -393,7 +393,7 @@ def collect_member_accesses(block, names):
   for kk in list(uses.keys()):
     name_list = uses[kk]
     if 1 >= len(name_list):
-      print(("WARNING: member '%s' of '%s' not accessed" % (name_list[0].getName(), str(block))))
+      print("WARNING: member '%s' of '%s' not accessed" % (name_list[0].getName(), str(block)))
     typeid = name_list[0].getType()
     if not typeid:
       raise RuntimeError("name '%s' has no type" % (name_list[0]))
