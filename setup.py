@@ -8,11 +8,6 @@ setup(name='Shrinky',
       author_email='xyproto@archlinux.org',
       license="BSD",
       py_modules=["shrinky"],
-      entry_points={
-          "console_scripts": [
-              "setconf = setconf:main",
-          ]
-      },
       classifiers=[
           "Environment :: Console",
           "License :: OSI Approved :: BSD License", # New BSD license
