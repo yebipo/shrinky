@@ -27,7 +27,7 @@ Optionally:
 * SDL2
 * GLEW
 * GLFW
-* Vulkan
+* Vulkan (Vulkan and GLFW support is under development)
 * sstrip by elfkickers
 
 Quick installation of dependencies
