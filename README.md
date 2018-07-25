@@ -2,7 +2,7 @@
 
 Minimal binary generator for 64-bit ELF files, for Arch Linux.
 
-Fork of [shrinky by Faemiyah](http://faemiyah.fi/demoscene/shrinky), which is mainly for FreeBSD.
+This is a fork of [dnload by Faemiyah](http://faemiyah.fi/demoscene/dnload).
 
 `shrinky` is a script for generating minimal ELF binaries from C code.
 It serves no practical real-world use case, but can be utilized to aid
@@ -15,23 +15,22 @@ in the creation of size-limited demoscene productions.
 * sstrip by elfkickers
 * python3
 
-And also, if you are going to use it:
+And optionally:
 
 * SDL2
 * GLEW
 * GLFW
 * Vulkan
 
-Quick installation of dependencies:
+#### Quick installation of dependencies
 
     pacman --needed -S base-devel elfkickers glew glfw sdl2 vulkan-devel
 
-## About
+## About Shrinky
 
-The script is used for the following purposes purposes:
+This application can be used for the following purposes purposes:
 
-- Building size-limited binaries directly from C/C++ source on
-  systems, where compilation is supported.
+- Building size-limited binaries directly from C/C++.
 - Generating a header file to hide the complexities of size-limited
   linking. This can be also be on systems where compilation is not
   supported. The purpose of this feature is to allow developers to
@@ -40,12 +39,10 @@ The script is used for the following purposes purposes:
 - Minifying GLSL shaders. This may done as part of compilation or used
   separately.
 
-Summary of operation
+When invoked, the `shrinky` command will:
 
-When invoked, the script will:
-
-- Probe for `g++`.
-- Search for header file it was supposed to generate. By default this is called shrinky.h.
+- Probe for required tools.
+- Search for header file it was supposed to generate. By default this is called `shrinky.h`.
 - Preprocess given source files with the compiler found earlier.
 - Examine preprocessor output and locate all function calls made with a specific prefix. By default this prefix is `shrinky_`.
 - Generate a loader code block that locates pointers to given functions.
