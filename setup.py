@@ -7,7 +7,7 @@ setup(name='Shrinky',
       author='Alexander F. Rødseth',
       author_email='xyproto@archlinux.org',
       license="BSD",
-      py_modules=["shrinky"],
+      packages=["shrinky"],
       classifiers=[
           "Environment :: Console",
           "License :: OSI Approved :: BSD License", # New BSD license
