@@ -34,6 +34,12 @@ Quick installation of dependencies:
 
     pacman --needed -Sy base-devel elfkickers glew glfw sdl2 vulkan-devel
 
+## Quick start
+
+Clone this repository, then:
+
+    ./shrinky.sh examples/intro.cpp && examples/intro
+
 ## About Shrinky
 
 This application can be used for the following purposes:
