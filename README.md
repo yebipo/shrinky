@@ -28,15 +28,15 @@ Optionally:
 * GLEW
 * GLFW
 * Vulkan (Vulkan and GLFW support is under development)
-* sstrip by elfkickers
+* `sstrip` from elfkickers
 
-Quick installation of dependencies
+Quick installation of dependencies:
 
-    pacman --needed -S base-devel elfkickers glew glfw sdl2 vulkan-devel
+    pacman --needed -Sy base-devel elfkickers glew glfw sdl2 vulkan-devel
 
 ## About Shrinky
 
-This application can be used for the following purposes purposes:
+This application can be used for the following purposes:
 
 - Building size-limited binaries directly from C/C++.
 - Generating a header file to hide the complexities of size-limited
