@@ -19,7 +19,7 @@ void _start()
 #endif
 {
   shrinky();
-  shrinky_puts("Hello World!");
+  shrinky_puts("0");
 
 #if defined(USE_LD)
   return 0;
